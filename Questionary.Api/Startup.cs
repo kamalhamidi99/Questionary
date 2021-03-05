@@ -7,6 +7,7 @@ using Microsoft.OpenApi.Models;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Questionary.Api.Services;
 using Questionary.Database.Context;
 
 namespace Questionary.Api
@@ -25,6 +26,10 @@ namespace Questionary.Api
         {
             services.AddDbContext<ApplicationDbContext>(
                 options => options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
+
+            services.AddTransient<IQuestionService, QuestionService>();
+            services.AddTransient<IQuizAnswerService, QuizAnswerService>();
+            services.AddTransient<IQuizService, QuizService>();
 
             services.AddControllers()
                 .AddJsonOptions(options =>

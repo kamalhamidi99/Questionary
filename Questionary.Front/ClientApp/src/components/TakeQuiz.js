@@ -86,7 +86,7 @@ export function TakeQuiz(props) {
                 </div>
                 <ul className="list-group">
                     {
-                        currentQuestion?.choice.map((item, index) => (
+                        currentQuestion?.choices.map((item, index) => (
                             <li className="list-group-item" key={index}>
                                 {currentQuestion.type === 'SingleAnswer'
                                     ? (<input type="radio" className="mr-2" onChange={onAnswerRadio} value={item.id} name="answer"

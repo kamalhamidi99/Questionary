@@ -1,9 +1,8 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Questionary.Database.Context;
+using Questionary.Api.Services;
 using Questionary.Database.Entity.Enum;
 
 namespace Questionary.Api.Controllers
@@ -13,29 +12,18 @@ namespace Questionary.Api.Controllers
     [EnableCors("Allow")]
     public class QuestionController : ControllerBase
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IQuestionService _questionService;
 
         public QuestionController(
-            ApplicationDbContext context)
+            IQuestionService questionService)
         {
-            _context = context;
+            _questionService = questionService;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(QuestionGroup @group)
+        public async Task<IEnumerable<object>> Get(QuestionGroup @group)
         {
-            var data = await _context.QuestionModels.Where(x => x.Group == @group).Select(x => new
-            {
-                x.Id,
-                x.Type,
-                x.Question,
-                Choice = x.QuestionChoiceModels.Select(c => new
-                {
-                    c.Id,
-                    c.Choice,
-                })
-            }).ToListAsync();
-            return Ok(data);
+            return await _questionService.GetAllAsync(group);
         }
     }
 }
